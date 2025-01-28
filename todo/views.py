@@ -11,30 +11,22 @@ from .models import Todo
 
 def home(request):
     
-    item_list = Todo.objects.order_by('-date')
+    item_list = Todo.objects.order_by("-date")
+    
     
     if request.method == 'POST':
         forms = TodoForm(request.POST)
         if forms.is_valid():
             forms.save()
-            messages.success(request, 'Todo Item added!!!')
+            messages.success(request, 'Todo Item added Successfully!!!')
 
             return redirect('home')
     else:
-        forms = TodoForm()
+        return render(request, 'todo/index2.html/',{'item_list':item_list})
     
-    page = {
-        'forms': forms,
-        'list': item_list,
-        'titles': 'TODO LIST',
-    }
 
-    return render(request, 'todo/index.html', page)
-        
-    #return HttpResponse(page)
-
-def remove(request, item_id):
+'''def remove(request, item_id):
     item = Todo.objects.get(id=item_id)
     item.delete()
     messages.info(request, 'Todo Item removed!!!')
-    return redirect('home')
+    return redirect('home')'''
