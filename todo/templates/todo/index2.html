@@ -2,13 +2,79 @@
 <html>
 <head>
     <style>
+        /* General Styles */
         body {
             text-align: center;
-            padding: 3% ;
-            background: pink;
-            border-radius: 25px;
-            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.4),
-                        0 6px 20px 0 rgba(0, 0, 0, 0.36);
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+            padding: 3%;
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        
+        /* Form Container */
+        #form {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            display: inline-block;
+            margin-bottom: 20px;
+        }
+        
+        /* Input Fields */
+        input[type="text"], input[type="date"] {
+            width: 80%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        
+        /* Submit Button */
+        button {
+            background: #ff6b6b;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        
+        button:hover {
+            background: #ff4757;
+        }
+        
+        /* List Section */
+        #list {
+            text-align: left;
+            max-width: 600px;
+            margin: auto;
+        }
+        
+        #list h1 {
+            color: #555;
+        }
+        
+        #list p {
+            background: white;
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* Delete Button */
+        .delete-btn {
+            background: #e74c3c;
+            padding: 5px 10px;
+            font-size: 12px;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+        
+        .delete-btn:hover {
+            background: #c0392b;
         }
     </style>
 </head>
@@ -16,28 +82,33 @@
     <section>
         {% if messages %}
             {% for message in messages %}
-                <p><strong>{{message}}</strong></p>
+                <p><strong>{{ message }}</strong></p>
             {% endfor %}
         {% endif %}
     </section>
+
     <div id="form">
         <h1>ADD TODO</h1>
         <form action="{% url 'home' %}" method="post">
             {% csrf_token %}
-            <input type="text" name="title" placeholder="TItle" required>
-            <input type="text" name="details" placeholder="details of the task" required>
+            <input type="text" name="title" placeholder="Title" required>
+            <input type="text" name="details" placeholder="Details of the task" required>
             <input type="date" name="date" required>
             <button type="submit">Submit</button>
-
         </form>
-
     </div>
+    
     <div id="list">
-        <h1>TODO LIST</h1>
         {% for i in item_list %}
             <h1>{{ i.date }}</h1>
-            <p>{{ i.title }}</p>
+            <p><strong>{{ i.title }}</strong></p>
             <p>{{ i.details }}</p>
+            
+            <!-- Delete Button -->
+            <form action="{% url 'del' i.id %}" method="post" style="display: inline;">
+                {% csrf_token %}
+                <button type="submit" class="delete-btn">Delete</button>
+            </form>
         {% endfor %}
     </div>
 </body>
